@@ -1,0 +1,5 @@
+x = 0.254*cos(th1)*cos(th2) + 0.0508*cos(th4)*(cos(th1)*cos(th2)*sin(th3) + cos(th1)*cos(th3)*sin(th2)) - 0.0508*sin(th4)*(cos(th1)*sin(th2)*sin(th3) - 1.0*cos(th1)*cos(th2)*cos(th3)) - 0.254*cos(th1)*sin(th2)*sin(th3) + 0.254*cos(th1)*cos(th2)*cos(th3)
+
+y = 0.254*cos(th2)*sin(th1) + 0.0508*cos(th4)*(cos(th2)*sin(th1)*sin(th3) + cos(th3)*sin(th1)*sin(th2)) - 0.0508*sin(th4)*(sin(th1)*sin(th2)*sin(th3) - 1.0*cos(th2)*cos(th3)*sin(th1)) - 0.254*sin(th1)*sin(th2)*sin(th3) + 0.254*cos(th2)*cos(th3)*sin(th1)
+
+z = 0.254*sin(th2) - 0.0508*cos(th4)*(cos(th2)*cos(th3) - 1.0*sin(th2)*sin(th3)) + 0.254*cos(th2)*sin(th3) + 0.254*cos(th3)*sin(th2) + 0.0508*sin(th4)*(cos(th2)*sin(th3) + cos(th3)*sin(th2)) + 0.254
