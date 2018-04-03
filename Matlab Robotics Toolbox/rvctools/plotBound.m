@@ -1,6 +1,6 @@
 function plotBound()
     % xyz positive and xyz negative for bounding box
-    xp = 0.7; yp = 0.150; zp = 0.7;
+    xp = 0.7; yp = 0.140; zp = 0.315;
     xn = 0; yn = -0.150; zn = -0.2;
     boundPoints = [[xn;yn;zn],[xn;yp;zn],[xp;yp;zn],[xp;yn;zn]...
                    [xn;yn;zp],[xn;yp;zp],[xp;yp;zp],[xp;yn;zp]];

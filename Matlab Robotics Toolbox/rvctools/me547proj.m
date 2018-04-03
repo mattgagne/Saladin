@@ -22,14 +22,15 @@ startup_rvc;
     
     
 %% Set up environment
-objZ = -0.33; % location of the floor to the origin
+objZ = -0.25; % location of the floor to the origin
 objDim = [0.075 0.075 0.125; 0.075 0.075 0.125];
-objPos = [0.3 0.12 objZ; 0.2 -0.12 objZ];
+objPos = [0.3 0.08 objZ; 0.3 -0.08 objZ];
 bowlDim = [0.1 0.1 0.1];
 bowlPos = [0.4 0 objZ];
 %% Find waypoints
-height_clear = 0.05;
-offset = 0.025;
+height_clear = 0.034;
+bowl_clear = 0.223;
+offset = 0.0;
 gripAng = -pi/2; % gripper pointing down
 gripL = 0.078; % gripper length
 waypoint = [];
@@ -39,16 +40,17 @@ waypoint = [];
         ang = atan2(objPos(ob,2),objPos(ob,1));
         xAt = distAt*cos(ang);
         yAt = distAt*sin(ang);
-        zAt = objPos(ob,3) + objDim(ob,3)/2 - gripL*sin(gripAng);
+        zAt = objPos(ob,3) + objDim(ob,3) - gripL*sin(gripAng);
         xAbove = distAbove*cos(ang);
         yAbove = distAbove*sin(ang);
         zAbove = objPos(ob,3) + objDim(ob,3) + height_clear - gripL*sin(gripAng);
+        bowlAbove = bowlPos(3) + bowlDim(3) + bowl_clear;
         % Add to waypoints, above, at, above, bowl, above, at, above for each object
         waypoint(size(waypoint,1)+1,:) = [xAbove, yAbove, zAbove];
         waypoint(size(waypoint,1)+1,:) = [xAt, yAt, zAt];
-        waypoint(size(waypoint,1)+1,:) = [xAbove, yAbove, zAbove];
-        waypoint(size(waypoint,1)+1,:) = [bowlPos(1), bowlPos(2), max((bowlPos(3) + bowlDim(3) + height_clear),(zAbove))];
-        waypoint(size(waypoint,1)+1,:) = [xAbove, yAbove, zAbove];
+        waypoint(size(waypoint,1)+1,:) = [xAbove, yAbove, bowlAbove];
+        waypoint(size(waypoint,1)+1,:) = [bowlPos(1), bowlPos(2), bowlAbove];
+        waypoint(size(waypoint,1)+1,:) = [xAbove, yAbove, bowlAbove];
         waypoint(size(waypoint,1)+1,:) = [xAt, yAt, zAt];
         waypoint(size(waypoint,1)+1,:) = [xAbove, yAbove, zAbove];   
     end
@@ -63,7 +65,7 @@ getTmatrix;
 qPrev = q;
 npts = 0;
 %%
-for point = 1:size(waypoint,1)
+for point = 1:5%size(waypoint,1)
     xNext = waypoint(point,1);
     yNext = waypoint(point,2);
     zNext = waypoint(point,3);
@@ -129,8 +131,8 @@ for point = 1:size(waypoint,1)
    qPrev = qNext;
 end
 %% Plot
-plotRobot;
-c = [1 0 0];
-plotObj(objDim, objPos, c);
-c = [0 1 1];
-plotObj(bowlDim, bowlPos, c);
+% plotRobot;
+% c = [1 0 0];
+% plotObj(objDim, objPos, c);
+% c = [0 1 1];
+% plotObj(bowlDim, bowlPos, c);
