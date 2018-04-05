@@ -130,9 +130,14 @@ for point = 1:5%size(waypoint,1)
 %     end
    qPrev = qNext;
 end
+%% Calc Total Distance
+total_distance = 0;
+for i = 1:size(waypoint,1)-1
+    total_distance = total_distance + norm([waypoint(i+1,:) - waypoint(i,:)]);
+end
 %% Plot
-% plotRobot;
-% c = [1 0 0];
-% plotObj(objDim, objPos, c);
-% c = [0 1 1];
-% plotObj(bowlDim, bowlPos, c);
+plotRobot;
+c = [0 1 1];
+plotObj(objDim, objPos, c);
+c = [1 0 0];
+plotObj(bowlDim, bowlPos, c);

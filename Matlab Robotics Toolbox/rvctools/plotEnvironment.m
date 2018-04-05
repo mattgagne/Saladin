@@ -1,9 +1,17 @@
 %takes in the points of the rectangles and plots the environment
 
-function plotEnvironment(ptsStore,posMinBound, posMaxBound, startPos, endPos, heights)
+function plotEnvironment(ptsStore,posMinBound, posMaxBound, startPos, endPos, nCups, nRand)
+
 hold on
 for i = 1:2:size(ptsStore,2)
-    fill3(ptsStore(:,i),ptsStore(:,i+1),heights,[1 0 0],'linestyle','-','EdgeColor',[1 0 0], 'LineWidth',2)
+    if (i/2 <= nCups)
+        c = [0 1 1]; % cup colour
+    elseif (i <= nCups + nRand)
+        c = [0 1 0]; % rand obj colour
+    else
+        c = [1 0 0]; % bowl colour
+    end
+    patch(ptsStore(:,i),ptsStore(:,i+1), c,'linestyle','-','EdgeColor', c, 'LineWidth',2)
 end
 plot(startPos(1),startPos(2),'b*')
 plot(endPos(1),endPos(2),'g*')
