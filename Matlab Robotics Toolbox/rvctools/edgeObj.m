@@ -1,3 +1,7 @@
+%Anton Dolgovykh
+%Mathieu Gagne
+%Nicholas Heersink
+
 function [objPoints] = edgeObj(objDim, objPos)
     objPoints = [0;0;0;0];
     for n = 1:size(objPos,1)

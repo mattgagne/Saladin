@@ -22,9 +22,16 @@ startup_rvc;
     
     
 %% Set up environment
+objDim = [0.055 0.055; 0.055 0.055; 0.0555 0.055; 0.055 0.055];
+objPos = [0.2 0.08; 0.2 -0.08; 0.5 0.1; 0.55 -0.1;];
+nCups = size(objPos,1);
+bowlDim = [0.1 0.1];
+bowlPos = [0.4 0];
+
+
 objZ = -0.25; % location of the floor to the origin
-objDim = [0.075 0.075 0.125; 0.075 0.075 0.125];
-objPos = [0.3 0.08 objZ; 0.3 -0.08 objZ];
+objDim = [0.055 0.055 0.125; 0.055 0.055 0.125; 0.055 0.055 0.125; 0.055 0.055 0.125];
+objPos = [0.2 0.08 objZ; 0.2 -0.08 objZ; 0.5 0.1 objZ; 0.55 -0.1 objZ];
 bowlDim = [0.1 0.1 0.1];
 bowlPos = [0.4 0 objZ];
 %% Find waypoints
@@ -45,11 +52,13 @@ waypoint = [];
         yAbove = distAbove*sin(ang);
         zAbove = objPos(ob,3) + objDim(ob,3) + height_clear - gripL*sin(gripAng);
         bowlAbove = bowlPos(3) + bowlDim(3) + bowl_clear;
-        % Add to waypoints, above, at, above, bowl, above, at, above for each object
+        % Add to waypoints, above, at, above, bowl, dump, above, at, above for each object
         waypoint(size(waypoint,1)+1,:) = [xAbove, yAbove, zAbove];
         waypoint(size(waypoint,1)+1,:) = [xAt, yAt, zAt];
         waypoint(size(waypoint,1)+1,:) = [xAbove, yAbove, bowlAbove];
         waypoint(size(waypoint,1)+1,:) = [bowlPos(1), bowlPos(2), bowlAbove];
+        waypoint(size(waypoint,1)+1,:) = [bowlPos(1)-0.05, bowlPos(2), bowlAbove]; % dump
+        waypoint(size(waypoint,1)+1,:) = [bowlPos(1), bowlPos(2), bowlAbove]; % un-dump
         waypoint(size(waypoint,1)+1,:) = [xAbove, yAbove, bowlAbove];
         waypoint(size(waypoint,1)+1,:) = [xAt, yAt, zAt];
         waypoint(size(waypoint,1)+1,:) = [xAbove, yAbove, zAbove];   
@@ -65,7 +74,7 @@ getTmatrix;
 qPrev = q;
 npts = 0;
 %%
-for point = 1:5%size(waypoint,1)
+for point = 1:size(waypoint,1)
     xNext = waypoint(point,1);
     yNext = waypoint(point,2);
     zNext = waypoint(point,3);
@@ -82,23 +91,23 @@ for point = 1:5%size(waypoint,1)
     qNext(1) = atan2(yNext,xNext);
     qNext(4) = -qNext(2) - qNext(3);
     qNext(5) = deg2rad(-90);
+    
+    if (mod(point,9) == 5)% || (mod(point,5) == 2) || (mod(point,5) == 3)
+       % dump into bowl point
+       qNext(4) = -qNext(2) - qNext(3) + deg2rad(110);
+        
+    end
+    
+    
     disc = 8;
     path_p(1, :) = linspace(qPrev(1), qNext(1), disc);
     path_p(2, :) = linspace(qPrev(2), qNext(2), disc);
     path_p(3, :) = linspace(qPrev(3), qNext(3), disc);
     path_p(4, :) = linspace(qPrev(4), qNext(4), disc);
     path_p(5, :) = linspace(qPrev(5), qNext(5), disc);
-    %if (mod(point,5) == 1) || (mod(point,5) == 2) || (mod(point,5) == 3)
-        for j = 1:1:4%size(q,2)
-            joint = j;
-            if (j == 2)
-                joint = 3;
-            end
-            if (j == 3)
-                joint = 2;
-            end
+       
             for delta = 1:disc
-               q(joint) = path_p(joint,delta);
+               q(:) = path_p(:,delta);
 
                 getTmatrix;
 
@@ -108,27 +117,13 @@ for point = 1:5%size(waypoint,1)
 %                 y_points(npts,:) = [0 T01(2,4) T02(2,4) T03(2,4) T04(2,4) T05(2,4)];% T06(2,4)];
 %                 z_points(npts,:) = [0 T01(3,4) T02(3,4) T03(3,4) T04(3,4) T05(3,4)];% T06(3,4)];
                 % With q4 moving at the same time
-                x_points(npts,:) = [0 T01(1,4) T02(1,4) T03(1,4) T04(1,4) T04(1,4)];% T06(1,4)];
-                y_points(npts,:) = [0 T01(2,4) T02(2,4) T03(2,4) T04(2,4) T04(2,4)];% T06(2,4)];
-                z_points(npts,:) = [0 T01(3,4) T02(3,4) T03(3,4) T04(3,4) T04(3,4)-gripL];% T06(3,4)];
+                x_points(npts,:) = [0 T01(1,4) T02(1,4) T03(1,4) T04(1,4) T05(1,4)];% T06(1,4)];
+                y_points(npts,:) = [0 T01(2,4) T02(2,4) T03(2,4) T04(2,4) T05(2,4)];% T06(2,4)];
+                z_points(npts,:) = [0 T01(3,4) T02(3,4) T03(3,4) T04(3,4) T05(3,4)];% T06(3,4)];
            end
-        end
-   % end
-%     if (mod(point,5) == 4) || (mod(point,5) == 0)% || (mod(point,5) == 3)
-%         for joint = 1:1:3%size(q,2)
-%             for delta = 1:disc
-%                q(joint) = path_p(joint,delta);
-% 
-%                 getTmatrix;
-% 
-%                 npts = npts+1;
-%                 x_points(npts,:) = [0 T01(1,4) T02(1,4) T03(1,4) T04(1,4)];% T05(1,4) T06(1,4)];
-%                 y_points(npts,:) = [0 T01(2,4) T02(2,4) T03(2,4) T04(2,4)];% T05(2,4) T06(2,4)];
-%                 z_points(npts,:) = [0 T01(3,4) T02(3,4) T03(3,4) T04(3,4)];% T05(3,4) T06(3,4)];
-%            end
-%         end
-%     end
-   qPrev = qNext;
+     
+   %end
+     qPrev = qNext;
 end
 %% Calc Total Distance
 total_distance = 0;
@@ -136,8 +131,18 @@ for i = 1:size(waypoint,1)-1
     total_distance = total_distance + norm([waypoint(i+1,:) - waypoint(i,:)]);
 end
 %% Plot
+%% Create AVI object
+makemovie = 1;
+if(makemovie)
+    vidObj = VideoWriter('trivial.avi');
+    vidObj.Quality = 100;
+    vidObj.FrameRate = 8;
+    open(vidObj);
+end
+
 plotRobot;
 c = [0 1 1];
 plotObj(objDim, objPos, c);
 c = [1 0 0];
 plotObj(bowlDim, bowlPos, c);
+close(vidObj);

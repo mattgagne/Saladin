@@ -4,10 +4,11 @@
         view(20,20);
         scatter3(x_points(i,:), y_points(i,:), z_points(i,:), 100, 'filled', 'b'); hold on;
         plot3(x_points(i,:), y_points(i,:), z_points(i,:), 'LineWidth', 5, 'color', 'b');
-        c = [1 0 0];
-        plotObj(objDim, objPos, c);
         c = [0 1 1];
+        plotObj(objDim, objPos, c);
+        c = [1 0 0];
         plotObj(bowlDim, bowlPos, c);
         plotBound;
-        pause(0.1);
+        if (makemovie) writeVideo(vidObj, getframe(gca)); end
+        %pause(0.1);
     end

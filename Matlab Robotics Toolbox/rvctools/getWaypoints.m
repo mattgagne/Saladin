@@ -1,3 +1,7 @@
+%Anton Dolgovykh
+%Mathieu Gagne
+%Nicholas Heersink
+
 function [waypoint] = getWaypoints(objPos, objDim, bowlPos, bowlDim)
 waypoint = [];
     for ob = 1:size(objPos,1)
@@ -16,4 +20,6 @@ waypoint = [];
         waypoint(size(waypoint,1)+1,:) = [x, y];
         waypoint(size(waypoint,1)+1,:) = [bowl(1), bowl(2)];
         waypoint(size(waypoint,1)+1,:) = [x, y]; 
-    end 
+    end
+    waypoint(length(waypoint)+1,:) = waypoint(length(waypoint),:);    
+end

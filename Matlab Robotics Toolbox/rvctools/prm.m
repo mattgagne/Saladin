@@ -1,6 +1,19 @@
+%Anton Dolgovykh
+%Mathieu Gagne
+%Nicholas Heersink
+%This code was created using base code from Steven Waslander's MTE 544
+%course
 
 clear; clc;
 
+%% Create AVI object
+makemovie = 1;
+if(makemovie)
+    vidObj = VideoWriter('prm.avi');
+    vidObj.Quality = 100;
+    vidObj.FrameRate = 0.5;
+    open(vidObj);
+end
 
 %% Parameters:
 
@@ -12,22 +25,64 @@ xR = xMax-xMin;
 %Set up start of robot arm:
 x0 = [0 0];
 % Set up the cup and bowl positions
-objDim = [0.075 0.075; 0.075 0.075; 0.075 0.075];
-objPos = [0.2 0.08; 0.2 -0.08; 0.5 0.1];
+%Config 1:
+objDim = [0.055 0.055; 0.055 0.055; 0.0555 0.055; 0.055 0.055];
+objPos = [0.2 0.08; 0.2 -0.08; 0.5 0.1; 0.55 -0.1;];
 nCups = size(objPos,1);
 bowlDim = [0.1 0.1];
-bowlPos = [0.4 -0.05];
-randObjDim = [];
-randObjPos = [];
-nRand = size(randObjPos,1);  
+bowlPos = [0.4 0];
+randObjDim = [0.025 0.025; 0.025 0.025; 0.025 0.025; 0.025 0.025];
+randObjPos = [0.3 -0.1; 0.3 0.05; 0.5 -0.05; 0.175 0];
+nRand = length(randObjPos);  
+
+%Config 2:
+objDim = [0.055 0.055; 0.055 0.055; 0.0555 0.055; 0.055 0.055];
+objPos = [0.2 0.1; 0.3 0.1; 0.4 0.1; 0.5 0.1;];
+nCups = size(objPos,1);
+bowlDim = [0.1 0.1];
+bowlPos = [0.35 -0.12];
+randObjDim = [0.025 0.025; 0.025 0.025; 0.025 0.025];
+randObjPos = [0.25 0; 0.35 0; 0.45 0];
+nRand = length(randObjPos);  
+
+%Config 3:
+objDim = [0.055 0.055; 0.055 0.055; 0.0555 0.055; 0.055 0.055];
+objPos = [0.2 0.08; 0.2 -0.08; 0.5 0.1; 0.55 -0.1;];
+nCups = size(objPos,1);
+bowlDim = [0.1 0.1];
+bowlPos = [0.35 -0.12];
+randObjDim = [0.02 0.2; 0.2 0.02; 0.2 0.02; 0.2 0.02];
+randObjPos = [0 0.05; 0.05 0; 0.5 0.05;  0.5 0];
+nRand = length(randObjPos);    
+
+%Config 4:
+
+% objDim = [0.055 0.055; 0.055 0.055; 0.0555 0.055];
+% objPos = [0.1 0.05; 0.22 -0.1; 0.475 0.11];
+% nCups = size(objPos,1);
+% bowlDim = [0.1 0.1];
+% bowlPos = [0.4 0];
+% randObjDim = [0.025 0.025; 0.025 0.025; 0.025 0.025];
+% randObjPos = [0.2 0; 0.3 0.05; 0.125 -0.025];
+% nRand = length(randObjPos);  
+
+%Config 5:
+objDim = [ 0.055 0.055; 0.055 0.055; 0.055 0.055; 0.055 0.055;];
+objPos = [0.125 -0.055; 0.3 0.1; 0.55 0; 0.65 0.05];
+nCups = size(objPos,1);
+bowlDim = [0.1 0.1];
+bowlPos = [0.4 0];
+randObjDim = [0.035 0.015; 0.020 0.025; 0.025 0.025; 0.025 0.025; 0.025 0.025; 0.015 0.035];
+randObjPos = [0.2 0; 0.25 0.0; 0.125 0.04; 0.45 0.1; 0.56 0.075; 0.45 -0.075];
+nRand = length(randObjPos);
 
 for i=1: length(objPos)
     totalObjDim(i,:) = objDim(i,:);
     totalObjPos(i,:) = objPos(i,:);
 end
 for i=1 : length(randObjDim) 
-    totalObjDim(i+ length(objPos,1),:) = randObjDim(i,:);
-    totalObjPos(i+ length(objPos,1),:) = randObjPos(i,:);
+    totalObjDim(i+ length(objPos),:) = randObjDim(i,:);
+    totalObjPos(i+ length(objPos),:) = randObjPos(i,:);
 end
 totalObjDim(length(totalObjDim) +1,:) = bowlDim;
 totalObjPos(length(totalObjPos) +1,:) = bowlPos;
@@ -38,17 +93,8 @@ obsPtsStore = edgeObj(totalObjDim, totalObjPos);
 waypoints = getWaypoints(objPos, objDim, bowlPos, bowlDim);
 
 % Cup params
-%nO = length(objDim) + length(randObjDim) +1; % number of cups + number of random obstacles + bowl -1
 nE = 4; % number of edges per obstacle (square vis)
 
-%Create enviornment:
-
-% obsEdges = [];
-% 
-% for i=1:nO
-%     env = [env; NaN NaN; obsPtsStore(:,2*(i-1)+1:2*i);obsPtsStore(1,2*(i-1)+1:2*i)];
-%     obsEdges = [obsEdges; obsPtsStore(1:nE,2*(i-1)+1:2*i) obsPtsStore([2:nE 1],2*(i-1)+1:2*i)];
-% end
 
 total_distance = 0;
 for wp=1:length(waypoints)
@@ -57,36 +103,50 @@ for wp=1:length(waypoints)
     if mod(wp,3) ~= 1
         if floor(wp/4)+1>1
             for i=1: floor((wp-1)/3)
-                totalObjDim(i,:) = objDim(i,:);
+                totalObjDim(i,:) = objDim(i,:) + [0.04 0.04];
                 totalObjPos(i,:) = objPos(i,:);
             end
             for i=floor((wp-1)/3)+2 :length(objPos)
-                totalObjDim(i,:) = objDim(i,:);
-                totalObjPos(i,:) = objPos(i,:); 
+                totalObjDim(i-1,:) = objDim(i,:)+ [0.04 0.04];
+                totalObjPos(i-1,:) = objPos(i,:); 
             end
+            for i=1 : length(randObjDim) 
+                totalObjDim(i+ length(objPos)-1,:) = randObjDim(i,:) + [0.04 0.04];
+                totalObjPos(i+ length(objPos)-1,:) = randObjPos(i,:) ;
+            end
+            totalObjDim(length(totalObjDim) +1,:) = bowlDim;
+            totalObjPos(length(totalObjPos) +1,:) = bowlPos;
         else
             for i=2 :length(objPos)
-                totalObjDim(i,:) = objDim(i,:);
-                totalObjPos(i,:) = objPos(i,:); 
+                totalObjDim(i-1,:) = objDim(i,:)+ [0.03 0.03];
+                totalObjPos(i-1,:) = objPos(i,:); 
             end
+            for i=1 : length(randObjDim) 
+                totalObjDim(i+ length(objPos)-1,:) = randObjDim(i,:)+ [0.04 0.04];
+                totalObjPos(i+ length(objPos)-1,:) = randObjPos(i,:);
+            end
+            totalObjDim(length(totalObjDim)+1 ,:) = bowlDim;
+            totalObjPos(length(totalObjPos)+1 ,:) = bowlPos;
+            
         end
         % Cup params
-%         nO = length(objDim) + length(randObjDim); % number of cups + number of random obstacles + bowl -1
+        nCups = size(objPos,1)-1;
+            
+        
     else
         for i=1: length(objPos)
             totalObjDim(i,:) = objDim(i,:);
             totalObjPos(i,:) = objPos(i,:);
         end
-        % Cup params
-%         nO = length(objDim) + length(randObjDim) +1; % number of cups + number of random obstacles + bowl -1
+        nCups = size(objPos,1);
+        for i=1 : length(randObjDim) 
+            totalObjDim(i+ length(objPos),:) = randObjDim(i,:);
+            totalObjPos(i+ length(objPos),:) = randObjPos(i,:);
+        end
+        totalObjDim(length(totalObjDim) +1,:) = bowlDim;
+        totalObjPos(length(totalObjPos) +1,:) = bowlPos;
     end
-    
-    for i=1 : length(randObjDim) 
-        totalObjDim(i+ length(objPos,1)-1,:) = randObjDim(i,:);
-        totalObjPos(i+ length(objPos,1)-1,:) = randObjPos(i,:);
-    end
-    totalObjDim(length(totalObjDim) +1,:) = bowlDim;
-    totalObjPos(length(totalObjPos) +1,:) = bowlPos;
+
 
     obsPtsStore = edgeObj(totalObjDim, totalObjPos);
     nO = length(totalObjDim);
@@ -111,25 +171,19 @@ for wp=1:length(waypoints)
     figure(1); clf; hold on;
     plotEnvironment(obsPtsStore,xMin, xMax, x0, xF, nCups, nRand);
     drawnow();
-    disp('Time to create environment');
 
-    %% Multi-query PRM, created in batch
-    tic;
+    %% PRM
 
-    % Get milestones
+    % Get sample points(milestones)
     nS = 200;
     samples = [xR(1)*rand(nS,1)+xMin(1) xR(2)*rand(nS,1)+xMin(2)];
     keep = inpolygon(samples(:,1),samples(:,2), env(:,1),env(:,2));
     milestones = [x0; xF; samples(find(keep==1),:)];
     figure(1); hold on;
-    %plot(samples(:,1),samples(:,2),'k.');
     plot(milestones(:,1),milestones(:,2),'m.');
     nM = length(milestones(:,1));
-    disp('Time to generate milestones');
-    toc;
 
     % Attempt to add closest p edges
-    tic;
     p = 20;
     e = zeros(nM,nM);
     D = zeros*ones(nM,nM);
@@ -140,32 +194,36 @@ for wp=1:length(waypoints)
             d(j) = norm(milestones(i,:)-milestones(j,:));
         end
         [d2,ind] = sort(d);
-        % Check for edge collisions (no need to check if entire edge is
-        % contained in obstacles as both endpoints are in free space)
+        % Check for edge collisions
         for j=1:p
             cur = ind(j);
             if (i<cur)
                 if (~CheckCollision(milestones(i,:),milestones(cur,:), obsEdges))
                     e(i,cur) = 1;
                     e(cur,i) = 1;
-                    plot([milestones(i,1) milestones(cur,1)],[milestones(i,2) milestones(cur,2)],'m');
+                    plot([milestones(i,1) milestones(cur,1)],[milestones(i,2) milestones(cur,2)],'m', 'LineWidth', 0.5);
                 end
             end
         end
     end
-    disp('Time to connect roadmap');
-    toc;
 
-    % Find shortest path
-    tic;
+    % Find shortest path from milestones
+
     [sp, sd] = shortestpath(milestones, e, 1, 2);
     for i=1:length(sp)-1
-        plot(milestones(sp(i:i+1),1),milestones(sp(i:i+1),2), 'go-', 'LineWidth',3);
+        plot(milestones(sp(i:i+1),1),milestones(sp(i:i+1),2), 'go-', 'LineWidth',2);
     end
     pause(2);
-    disp('Time to find shortest path');
-    toc;
     x0 = waypoints(wp,:);
     total_distance = total_distance + sd;
+    if (makemovie) writeVideo(vidObj, getframe(gca)); end
+    h = zeros(5, 1);
+    h(1) = scatter(NaN,NaN,'filled','r');
+    h(2) = scatter(NaN,NaN,'filled','g');
+    h(3) = scatter(NaN,NaN,'filled','c');
+    h(4) = scatter(NaN,NaN,'filled','b');
+    h(5) = scatter(NaN,NaN,'filled','k');
+    legend(h, 'Bowl', 'Obstacle', 'Cup','Start', 'Goal');
 end
+close(vidObj);
 total_distance
