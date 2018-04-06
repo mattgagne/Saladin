@@ -17,25 +17,42 @@ startup_rvc;
     L(5) = Link('d', 0.078, 'a', 0, 'alpha', 0);
 
     %Form the robot
-    Fanuc_200id = SerialLink(L, 'name', '200id');
-    
-    
+    Fanuc_200id = SerialLink(L, 'name', '200id');   
     
 %% Set up environment
-objDim = [0.055 0.055; 0.055 0.055; 0.0555 0.055; 0.055 0.055];
-objPos = [0.2 0.08; 0.2 -0.08; 0.5 0.1; 0.55 -0.1;];
-nCups = size(objPos,1);
-bowlDim = [0.1 0.1];
-bowlPos = [0.4 0];
-
-
+%Config 1:
+% objZ = -0.25; % location of the floor to the origin
+% objDim = [0.055 0.055 0.125; 0.055 0.055 0.125; 0.055 0.055 0.125; 0.055 0.055 0.125];
+% objPos = [0.2 0.08 objZ; 0.2 -0.08 objZ; 0.5 0.1 objZ; 0.5 -0.1 objZ];
+% bowlDim = [0.1 0.1 0.1];
+% bowlPos = [0.4 0 objZ];
+%Config 2:
 objZ = -0.25; % location of the floor to the origin
 objDim = [0.055 0.055 0.125; 0.055 0.055 0.125; 0.055 0.055 0.125; 0.055 0.055 0.125];
-objPos = [0.2 0.08 objZ; 0.2 -0.08 objZ; 0.5 0.1 objZ; 0.55 -0.1 objZ];
+objPos = [0.2 0.1 objZ; 0.3 0.1 objZ; 0.4 0.1 objZ; 0.5 0.1 objZ];
 bowlDim = [0.1 0.1 0.1];
-bowlPos = [0.4 0 objZ];
+bowlPos = [0.35 -0.12 objZ];
+%Config 3:
+% objZ = -0.25; % location of the floor to the origin
+% objDim = [0.055 0.055 0.125; 0.055 0.055 0.125; 0.055 0.055 0.125; 0.055 0.055 0.125];
+% objPos = [0.2 0.08 objZ; 0.2 -0.08 objZ; 0.5 0.1 objZ; 0.5 -0.1 objZ];
+% bowlDim = [0.1 0.1 0.1];
+% bowlPos = [0.35 -0.12 objZ];
+%Config 4:
+% objZ = -0.25; % location of the floor to the origin
+% objDim = [0.055 0.055 0.125; 0.055 0.055 0.125; 0.055 0.055 0.125];
+% objPos = [0.1 0.05 objZ; 0.22 -0.1 objZ; 0.475 0.11 objZ];
+% bowlDim = [0.1 0.1 0.1];
+% bowlPos = [0.4 0 objZ];
+%Config 5:
+% objZ = -0.25; % location of the floor to the origin
+% objDim = [0.055 0.055 0.125; 0.055 0.055 0.125; 0.055 0.055 0.125; 0.055 0.055 0.125];
+% objPos = [0.125 -0.055 objZ; 0.3 0.1 objZ; 0.5 0.02 objZ; 0.5 -0.1 objZ];
+% bowlDim = [0.1 0.1 0.1];
+% bowlPos = [0.4 0 objZ];
+
 %% Find waypoints
-height_clear = 0.034;
+height_clear = 0.05;
 bowl_clear = 0.223;
 offset = 0.0;
 gripAng = -pi/2; % gripper pointing down
@@ -146,3 +163,4 @@ plotObj(objDim, objPos, c);
 c = [1 0 0];
 plotObj(bowlDim, bowlPos, c);
 close(vidObj);
+total_distance

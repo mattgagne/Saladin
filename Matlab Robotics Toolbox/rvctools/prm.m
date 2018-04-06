@@ -27,33 +27,33 @@ x0 = [0 0];
 % Set up the cup and bowl positions
 %Config 1:
 objDim = [0.055 0.055; 0.055 0.055; 0.0555 0.055; 0.055 0.055];
-objPos = [0.2 0.08; 0.2 -0.08; 0.5 0.1; 0.55 -0.1;];
+objPos = [0.2 0.08; 0.2 -0.08; 0.5 0.1; 0.5 -0.1;];
 nCups = size(objPos,1);
 bowlDim = [0.1 0.1];
 bowlPos = [0.4 0];
-randObjDim = [0.025 0.025; 0.025 0.025; 0.025 0.025; 0.025 0.025];
-randObjPos = [0.3 -0.1; 0.3 0.05; 0.5 -0.05; 0.175 0];
+randObjDim = [0.025 0.065; 0.025 0.065; 0.065 0.025; 0.025 0.065];
+randObjPos = [0.3 -0.1; 0.3 0.05; 0.5 0; 0.175 0];
 nRand = length(randObjPos);  
 
 %Config 2:
-objDim = [0.055 0.055; 0.055 0.055; 0.0555 0.055; 0.055 0.055];
-objPos = [0.2 0.1; 0.3 0.1; 0.4 0.1; 0.5 0.1;];
-nCups = size(objPos,1);
-bowlDim = [0.1 0.1];
-bowlPos = [0.35 -0.12];
-randObjDim = [0.025 0.025; 0.025 0.025; 0.025 0.025];
-randObjPos = [0.25 0; 0.35 0; 0.45 0];
-nRand = length(randObjPos);  
+% objDim = [0.055 0.055; 0.055 0.055; 0.0555 0.055; 0.055 0.055];
+% objPos = [0.2 0.1; 0.3 0.1; 0.4 0.1; 0.5 0.1;];
+% nCups = size(objPos,1);
+% bowlDim = [0.1 0.1];
+% bowlPos = [0.35 -0.12];
+% randObjDim = [0.09 0.015; 0.09 0.015; 0.09 0.015];
+% randObjPos = [0.25 0; 0.35 0; 0.45 0];
+% nRand = length(randObjPos);  
 
 %Config 3:
-objDim = [0.055 0.055; 0.055 0.055; 0.0555 0.055; 0.055 0.055];
-objPos = [0.2 0.08; 0.2 -0.08; 0.5 0.1; 0.55 -0.1;];
-nCups = size(objPos,1);
-bowlDim = [0.1 0.1];
-bowlPos = [0.35 -0.12];
-randObjDim = [0.02 0.2; 0.2 0.02; 0.2 0.02; 0.2 0.02];
-randObjPos = [0 0.05; 0.05 0; 0.5 0.05;  0.5 0];
-nRand = length(randObjPos);    
+% objDim = [0.055 0.055; 0.055 0.055; 0.0555 0.055; 0.055 0.055];
+% objPos = [0.2 0.08; 0.2 -0.08; 0.5 0.1; 0.5 -0.1;];
+% nCups = size(objPos,1);
+% bowlDim = [0.1 0.1];
+% bowlPos = [0.35 -0.12];
+% randObjDim = [0.02 0.2; 0.2 0.02; 0.2 0.02; 0.2 0.02];
+% randObjPos = [0 0.05; 0.2 -0.02; 0.5 0.05;  0.5 0];
+% nRand = length(randObjPos);    
 
 %Config 4:
 
@@ -67,14 +67,14 @@ nRand = length(randObjPos);
 % nRand = length(randObjPos);  
 
 %Config 5:
-objDim = [ 0.055 0.055; 0.055 0.055; 0.055 0.055; 0.055 0.055;];
-objPos = [0.125 -0.055; 0.3 0.1; 0.55 0; 0.65 0.05];
-nCups = size(objPos,1);
-bowlDim = [0.1 0.1];
-bowlPos = [0.4 0];
-randObjDim = [0.035 0.015; 0.020 0.025; 0.025 0.025; 0.025 0.025; 0.025 0.025; 0.015 0.035];
-randObjPos = [0.2 0; 0.25 0.0; 0.125 0.04; 0.45 0.1; 0.56 0.075; 0.45 -0.075];
-nRand = length(randObjPos);
+% objDim = [ 0.055 0.055; 0.055 0.055; 0.055 0.055; 0.055 0.055;];
+% objPos = [0.125 -0.055; 0.3 0.1; 0.5 0.02; 0.5 -0.1];
+% nCups = size(objPos,1);
+% bowlDim = [0.1 0.1];
+% bowlPos = [0.4 0];
+% randObjDim = [0.035 0.015; 0.020 0.025; 0.025 0.025; 0.025 0.025; 0.025 0.025; 0.015 0.035];
+% randObjPos = [0.2 0; 0.25 0.0; 0.125 0.04; 0.45 0.12; 0.56 0.075; 0.35 -0.075];
+% nRand = length(randObjPos);
 
 for i=1: length(objPos)
     totalObjDim(i,:) = objDim(i,:);
